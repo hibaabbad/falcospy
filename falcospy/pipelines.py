@@ -12,24 +12,22 @@ import mysql.connector
 class FalcospyPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        lowercase_keys = ['category']
-        for lowercase_key in lowercase_keys:
-            value = adapter.get(lowercase_key)
-            if value != None :
-                value = value.lower()
-                adapter[lowercase_key] = value.replace('computing/computers & accessories/computers & tablets/laptops','')
+        price_key = ['price']
+        value = adapter.get(price_key)
+        if value != None :
+            value = value.replace('DA','')
+            value = value.replace(' ','')
+            adapter[price_key] = value
             
-        price_keys = ['price', 'old_price']
-        for price_key in price_keys:
-            value = adapter.get(price_key)
-            if value != None :
-               value = value.replace('DA','')
-               value = value.replace(' ','')
-               adapter[price_key] = value
-
+        rate = ['rate']
+        value = adapter.get(rate)
+        if value != None :
+            value = value.replace('out of 5','')
+            value = value.replace(' ','')
+            adapter[rate] = int(value)
         return item
     
-class SaveToMySQLPipeline:
+"""class SaveToMySQLPipeline:
 
     def __init__(self):
        self.conn = mysql.connector.connect(
@@ -40,42 +38,88 @@ class SaveToMySQLPipeline:
        self.cur = self.conn.cursor()
         
         ## Create books table if none exists
-       self.cur.execute("""
-        CREATE TABLE IF NOT EXISTS pcs(
-            id int NOT NULL auto_increment, 
+       self.cur.execute(
+       CREATE TABLE IF NOT EXISTS Pcs(
+            id int NOT NULL auto_increment,
             url VARCHAR(255),
-            title text,
-            price DECIMAL,
-            old_price DECIMAL,
-            category VARCHAR(255),
-            brand text,
+            title VARCHAR(255), 
+            price DECIMAL(10, 1),
+            description TEXT, 
+            cpu VARCHAR(255),
+            ram VARCHAR(255),
+            storage VARCHAR(255),
+            screen VARCHAR(255),
+            integrated_gpu VARCHAR(255),
+            dedicated_gpu VARCHAR(255),
+            os VARCHAR(255),
+            battery VARCHAR(255),
+            images TEXT,
+            rate INTEGER,
+            state VARCHAR(255),
+            brand VARCHAR(255),
+            date DATE,
+            source VARCHAR(255),
             PRIMARY KEY (id)
         )
-        """)
+        )
 
     def process_item(self, item, spider):
          ## Define insert statement
-        self.cur.execute(""" insert into pcs(
-            url, 
+        self.cur.execute(insert into Pcs(
+            url,
             title, 
             price,
-            old_price,
-            category,
-            brand
+            description, 
+            cpu,
+            ram,
+            storage,
+            screen,
+            integrated_gpu,
+            dedicated_gpu,
+            os,
+            battery,
+            images,
+            rate,
+            state,
+            brand,
+            date,
+            source,
             ) values (
                 %s,
                 %s,
                 %s,
                 %s,
                 %s,
-                %s
-                )""", (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                GETDATE(),
+                'Jumia'
+                ), (
             item["url"],
             item["title"],
             item["price"],
-            item["old_price"],
-            item["category"],
-            item["brand"]
+            item["description"],
+            item["cpu"],
+            item["ram"],
+            item["storage"],
+            item["screen"],
+            item["integrated_gpu"],
+            item["dedicated_gpu"],
+            item["os"],
+            item["battery"],
+            item["images"],
+            item["rate"],
+            item["state"],
+            item["brand"],
         ))
 
         ## Execute insert of data into database
@@ -87,4 +131,4 @@ class SaveToMySQLPipeline:
 
         ## Close cursor & connection to database 
         self.cur.close()
-        self.conn.close()
+        self.conn.close()"""

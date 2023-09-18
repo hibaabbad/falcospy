@@ -7,10 +7,21 @@ import scrapy
 
 
 class FalcospyItem(scrapy.Item):
-   url = scrapy.Field()
-   title = scrapy.Field()
-   category = scrapy.Field()
-   brand = scrapy.Field()
-   price = scrapy.Field()
-   old_price = scrapy.Field()
-   
+            images= scrapy.Field()
+            url= scrapy.Field()
+            title= scrapy.Field()
+            brand= scrapy.Field()
+            price= scrapy.Field()
+            rate= scrapy.Field()
+            description= scrapy.Field()
+            cpu= scrapy.Field()
+            ram= scrapy.Field()
+            storage = scrapy.Field()
+            screen = scrapy.Field()
+            integrated_gpu = scrapy.Field()
+            dedicated_gpu = scrapy.Field()
+            os = scrapy.Field()
+            battery = scrapy.Field()
+            state = scrapy.Field()
+            date = scrapy.Field()
+            source = scrapy.Field()

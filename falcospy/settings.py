@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = "falcospy.spiders"
 #USER_AGENT = "falcospy (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -87,12 +87,21 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
+
+"""SCRAPEOPS_API_KEY = 'ffb2e5b9-6724-46c6-895a-cc5caca8fecf'
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
+
+DOWNLOADER_MIDDLEWARES = {
+    'falcospy.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+}"""
+
+
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 
-"""FEEDS = {
+FEEDS = {
     'data.json': {'format': 'json'}
-}"""
+}

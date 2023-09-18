@@ -7,9 +7,7 @@ class PcspiderSpider(scrapy.Spider):
     allowed_domains = ["www.jumia.dz"]
     start_urls = ["https://www.jumia.dz/ordinateurs-pc/"]
     
-    """custom_settings = {
-        'FEEDS': { 'data.csv': { 'format': 'csv',}}
-        }"""
+
 
     def parse(self, response):
         for pc in response.css('a.core'):
