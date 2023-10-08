@@ -12,19 +12,18 @@ import mysql.connector
 class FalcospyPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        price_key = ['price']
-        value = adapter.get(price_key)
+        value = adapter.get('price')
         if value != None :
             value = value.replace('DA','')
             value = value.replace(' ','')
-            adapter[price_key] = value
+            adapter['price'] = value
             
-        rate = ['rate']
-        value = adapter.get(rate)
+       
+        value = adapter.get('rate')
         if value != None :
             value = value.replace('out of 5','')
             value = value.replace(' ','')
-            adapter[rate] = int(value)
+            adapter['rate'] = int(value)
         return item
     
 """class SaveToMySQLPipeline:
@@ -55,9 +54,7 @@ class FalcospyPipeline:
             battery VARCHAR(255),
             images TEXT,
             rate INTEGER,
-            state VARCHAR(255),
             brand VARCHAR(255),
-            date DATE,
             source VARCHAR(255),
             PRIMARY KEY (id)
         )
@@ -80,13 +77,9 @@ class FalcospyPipeline:
             battery,
             images,
             rate,
-            state,
             brand,
-            date,
             source,
             ) values (
-                %s,
-                %s,
                 %s,
                 %s,
                 %s,
