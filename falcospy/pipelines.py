@@ -16,6 +16,7 @@ class FalcospyPipeline:
         if value != None :
             value = value.replace('DA','')
             value = value.replace(' ','')
+            value = value.replace(',','.')
             adapter['price'] = value
             
        
@@ -23,14 +24,14 @@ class FalcospyPipeline:
         if value != None :
             value = value.replace('out of 5','')
             value = value.replace(' ','')
-            adapter['rate'] = int(value)
+            adapter['rate'] = float(value)
         return item
     
 class SaveToMySQLPipeline:
 
     def __init__(self):
        self.conn = mysql.connector.connect(
-            host = 'localhost',database = 'falcospy',user = 'root',password = 'jiminssilove')
+            host = 'localhost',database = 'jimin',user = 'root',password = 'jiminssilove')
        
         ## Create cursor, used to execute commands
         
@@ -42,7 +43,7 @@ class SaveToMySQLPipeline:
             id int NOT NULL auto_increment,
             url VARCHAR(255),
             title VARCHAR(255), 
-            price DECIMAL(10, 1),
+            price INTEGER,
             description TEXT, 
             cpu VARCHAR(255),
             ram VARCHAR(255),
@@ -54,28 +55,28 @@ class SaveToMySQLPipeline:
             brand VARCHAR(255),
             source VARCHAR(255),
             PRIMARY KEY (id)
-        );
-        CREATE TABLE IF NOT EXIST Photos(
+        );""")
+       self.cur.execute("""
+        CREATE TABLE IF NOT EXISTS Photos(
             id_ph int NOT NULL auto_increment,
-            url_ph VARCHAR(255),
-            pc_id int NOT NULL auto_increment,
+            url_ph VARCHAR(1000),
+            pc_id int NOT NULL,
             PRIMARY KEY (id_ph)
         );
         ALTER TABLE Photos ADD CONSTRAINT fk_photos_pc FOREIGN KEY (pc_id) REFERENCES Pcs(id) ON DELETE CASCADE;
-        )
-""")
+        """)
     def process_item(self, item, spider):
          ## Define insert statement
-        self.cur.execute("""insert into Pcs(
+        self.cur.execute("""INSERT INTO Pcs(
             url,title,price,description,cpu,ram,storage,screen,integrated_gpu,dedicated_gpu,
-            rate,brand,source,
-            ) values (
+            rate,brand,source
+            ) VALUES (
                 %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
                 %s,%s,'Jumia'
-                ), (
+                )""", (
             item["url"],
             item["title"],
-            item["price"],
+            float(item["price"]),
             item["description"],
             item["cpu"],
             item["ram"],
@@ -84,9 +85,9 @@ class SaveToMySQLPipeline:
             item["integrated_gpu"],
             item["dedicated_gpu"],
             item["rate"],
-            item["brand"],
-        );
-        SELECT LAST_INSERT_ID();
+            item["brand"]
+        ))
+        self.cur.execute(""" SELECT LAST_INSERT_ID();
         SET @pc_id = LAST_INSERT_ID();
         """)
         for i in item['images']:

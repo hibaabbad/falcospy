@@ -36,6 +36,7 @@ class JumiaspiderSpider(scrapy.Spider):
             
             character = character.replace('\t',' ')
             character = character.replace('\n',' ')
+            
             character = character.replace('é','e')
             character = character.lower()
             
@@ -49,8 +50,9 @@ class JumiaspiderSpider(scrapy.Spider):
                 pc['screen'] = character
             if "carte graphique integre"  in character : 
                 pc['integrated_gpu'] = character
+            else: pc['integrated_gpu'] = None
             if "carte graphique dediee"  in character : 
                 pc['dedicated_gpu'] = character
-            
+            else: pc['dedicated_gpu'] = None
         yield pc 
     
