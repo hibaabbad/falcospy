@@ -20,6 +20,4 @@ class FalcospyItem(scrapy.Item):
             screen = scrapy.Field()
             integrated_gpu = scrapy.Field()
             dedicated_gpu = scrapy.Field()
-            os = scrapy.Field()
-            battery = scrapy.Field()
             source = scrapy.Field()

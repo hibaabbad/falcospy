@@ -2,9 +2,7 @@ import scrapy
 
 from falcospy.items import FalcospyItem
 
-custom_settings = {
-        'FEEDS': {'data.json': {'format': 'json'}}
-        }
+
 
 class JumiaspiderSpider(scrapy.Spider):
     name = "jumiaspider"
@@ -23,7 +21,7 @@ class JumiaspiderSpider(scrapy.Spider):
         
         pc = FalcospyItem()
         
-        pc['images'] = response.css("div.sldr a").attrib['href']
+        pc['images'] = response.css("div.sldr a::attr(href)").getall()
         pc['url'] = response.url
         pc['title'] = response.css("h1::text").get()
         pc['brand'] = response.css('div.-pvxs a._more::text').get()
@@ -53,10 +51,6 @@ class JumiaspiderSpider(scrapy.Spider):
                 pc['integrated_gpu'] = character
             if "carte graphique dediee"  in character : 
                 pc['dedicated_gpu'] = character
-            if "windows" in character or "win" in character : 
-                pc['os'] = character
-            if "batterie"  in character : 
-                pc['battery'] = character
             
         yield pc 
     

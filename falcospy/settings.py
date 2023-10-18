@@ -64,6 +64,10 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "falcospy.pipelines.FalcospyPipeline": 300,
+   "falcospy.pipelines.SaveToMySQLPipeline": 400,
+   
+   
+   
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -102,6 +106,3 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 
-FEEDS = {
-    'data.json': {'format': 'json'}
-}
